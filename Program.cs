@@ -40,14 +40,11 @@ namespace LogiNumLock
             }
 
             LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
+            SetNumKeyState();
 
             // poll the key every 100ms
             var timer = new Timer(100) {Enabled = true}; // milliseconds
-            timer.Elapsed += (sender, eventArgs) =>
-            {
-                var numLocked = (((ushort) GetKeyState(0x90)) & 0xffff) != 0;
-                ToggleNumKeys(numLocked);
-            };
+            timer.Elapsed += (sender, eventArgs) => { SetNumKeyState(); };
 
             LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(keyboardNames.L, 0, 100, 100);
 
@@ -57,6 +54,12 @@ namespace LogiNumLock
             LogitechGSDK.LogiLedShutdown();
         }
 
+        private void SetNumKeyState()
+        {
+            var numLocked = (((ushort) GetKeyState(0x90)) & 0xffff) != 0;
+            ToggleNumKeys(numLocked);
+        }
+
         private void ToggleNumKeys(bool numLocked)
         {
             if (_numLocked == numLocked)
@@ -64,8 +67,8 @@ namespace LogiNumLock
 
             _numLocked = numLocked;
 
-            int offRed = 255, offGreen = 20, offBlue = 0;
-            int onRed = 203, onGreen = 255, onBlue = 10;
+            int onRed = 255, onGreen = 20, onBlue = 0;
+            int offRed = 203, offGreen = 255, offBlue = 10;
 
             var r = numLocked ? onRed : offRed;
             var g = numLocked ? onGreen : offGreen;
