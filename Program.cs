@@ -81,6 +81,7 @@ namespace LogiNumLock
             var g = _numLocked ? 0 : 255;
             var b = _numLocked ? 0 : 10;
 
+            Console.WriteLine($"NumLock = {!_numLocked}");
             foreach (var key in _numKeys)
             {
                 LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(key, r, g, b);
