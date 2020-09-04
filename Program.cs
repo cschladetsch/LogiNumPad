@@ -10,6 +10,9 @@ namespace LogiNumLock
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, CallingConvention = CallingConvention.Winapi)]
         public static extern short GetKeyState(int keyCode);
 
+        [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool LogiLedFlashLighting(int redPercentage, int greenPercentage, int bluePercentage, int milliSecondsDuration, int milliSecondsInterval);
+
         private bool _numLocked;
         private readonly keyboardNames[] _numKeys =
         {
@@ -61,8 +64,8 @@ namespace LogiNumLock
 
             _numLocked = numLocked;
 
-            int onRed = 200, onGreen = 0, onBlue = 0;
-            int offRed =20, offGreen = 200, offBlue = 10;
+            int offRed = 255, offGreen = 20, offBlue = 0;
+            int onRed = 203, onGreen = 255, onBlue = 10;
 
             var r = numLocked ? onRed : offRed;
             var g = numLocked ? onGreen : offGreen;
