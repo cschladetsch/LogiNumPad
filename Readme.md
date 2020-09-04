@@ -1,7 +1,10 @@
 # LogiNumLock ![Logo](res/Logo.jpg)
-
 This is a simple console application that changes the color of the numpad keys when the `NumLock` key is toggled. This was a real oversight by Logitech, but hey at least they gave us an Sdk to make fixes like this. Kudos for that at least.
 
+## Important
+Running this app seems to stop the G-HUB app from running. A simple work-around for the moment is to just close the `LogiNumLock` before running G-Hub and starting it after.
+
+## Usage
 It's a very simple app. Currently, you just run it as a console application, and press `Enter` to close it.
 
 If there's any interest I could improve it:
