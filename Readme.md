@@ -1,7 +1,7 @@
 # LogiNumLock ![Logo](res/Logo.jpg)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/cschladetsch/LogiNumPad?svg=true)](https://ci.appveyor.com/project/cschladetsch/LogiNumPad)
 [![CodeFactor](https://www.codefactor.io/repository/github/cschladetsch/LogiNumPad/badge)](https://www.codefactor.io/repository/github/cschladetsch/LogiNumPad)
-[![License](https://img.shields.io/github/license/cschladetsch/LogiNumPad.svg?label=License&maxAge=86400)](./LICENSE)
+[![License](https://img.shields.io/github/license/cschladetsch/LogiNumPad.svg?label=License&maxAge=86400)](./LICENSE.txt)
 ![Release](https://img.shields.io/github/release/cschladetsch/LogiNumPad.svg?label=Release&maxAge=60)
 
 This is a simple console application that changes the color of the numpad keys when the `NumLock` key is toggled. This was a real oversight by Logitech, but hey at least they gave us an Sdk to make fixes like this. Kudos for that at least.
