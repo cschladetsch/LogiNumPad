@@ -1,4 +1,4 @@
-# LogiNumLock ![Logo](res\logo.jpg)
+# LogiNumLock ![Logo](res/Logo.jpg)
 
 This is a simple console application that changes the color of the numpad keys when the `NumLock` key is toggled. This was a real oversight by Logitech, but hey at least they gave us an Sdk to make fixes like this. Kudos for that at least.
 
