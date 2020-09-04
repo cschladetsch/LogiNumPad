@@ -46,8 +46,6 @@ namespace LogiNumLock
             var timer = new Timer(100) {Enabled = true}; // milliseconds
             timer.Elapsed += (sender, eventArgs) => { SetNumKeyState(); };
 
-            LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(keyboardNames.L, 0, 100, 100);
-
             Console.WriteLine("Press \"ENTER\" to close.");
             Console.ReadLine();
 
