@@ -26,6 +26,8 @@ namespace LogiNumLock
             keyboardNames.NUM_SEVEN,
             keyboardNames.NUM_EIGHT,
             keyboardNames.NUM_NINE,
+            keyboardNames.NUM_PERIOD,
+
         };
 
         static void Main(string[] args)
