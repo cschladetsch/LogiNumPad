@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Timers;
+using System.Runtime.InteropServices;
+
 using LedCSharp;
 
 namespace LogiNumLock
@@ -14,6 +15,7 @@ namespace LogiNumLock
         public static extern bool LogiLedFlashLighting(int redPercentage, int greenPercentage, int bluePercentage, int milliSecondsDuration, int milliSecondsInterval);
 
         private bool _numLocked;
+
         private readonly keyboardNames[] _numKeys =
         {
             keyboardNames.NUM_ZERO,
@@ -27,25 +29,28 @@ namespace LogiNumLock
             keyboardNames.NUM_EIGHT,
             keyboardNames.NUM_NINE,
             keyboardNames.NUM_PERIOD,
-
         };
 
         static void Main(string[] args)
             => new Program().Run();
 
-        void Run()
+        private void Run()
         {
-            if (!LogitechGSDK.LogiLedInit())//WithName("Keypad fix. See https://github.com/cschladetsch"))
+            if (!LogitechGSDK.LogiLedInit())
             {
-                Console.WriteLine("Failed to start LogiTech SDK. Plug in a keyboard or something.");
+                Console.Error.WriteLine("Failed to start LogiTech SDK. Plug in a keyboard or something.");
                 return;
             }
 
             LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
+
+            // Read and apply start keypad state
             SetNumKeyState();
 
-            // poll the key every 100ms
-            var timer = new Timer(100) {Enabled = true}; // milliseconds
+            Console.WriteLine($"Monitoring Numlock. Current status={_numLocked}\n\n");
+
+            const int pollTime = 60; // milliseconds
+            var timer = new Timer(pollTime) {Enabled = true};
             timer.Elapsed += (sender, eventArgs) => { SetNumKeyState(); };
 
             Console.WriteLine("Press \"ENTER\" to close.");
@@ -56,7 +61,7 @@ namespace LogiNumLock
 
         private void SetNumKeyState()
         {
-            var numLocked = (((ushort) GetKeyState(0x90)) & 0xffff) == 0;
+            var numLocked = ((ushort) GetKeyState(0x90) & 0xffff) == 0;
             ToggleNumKeys(numLocked);
         }
 
@@ -70,13 +75,11 @@ namespace LogiNumLock
             SetNumKeyColors();
         }
 
-        void SetNumKeyColors()
+        private void SetNumKeyColors()
         {
-            int onRed = 255, onGreen = 20, onBlue = 0;
-            int offRed = 203, offGreen = 255, offBlue = 10;
-            var r = _numLocked ? onRed : offRed;
-            var g = _numLocked ? onGreen : offGreen;
-            var b = _numLocked ? onBlue : offBlue;
+            var r = _numLocked ? 255 : 200;
+            var g = _numLocked ? 0 : 255;
+            var b = _numLocked ? 0 : 10;
 
             foreach (var key in _numKeys)
             {
