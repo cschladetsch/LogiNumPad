@@ -54,7 +54,7 @@ namespace LogiNumLock
 
         private void SetNumKeyState()
         {
-            var numLocked = (((ushort) GetKeyState(0x90)) & 0xffff) != 0;
+            var numLocked = (((ushort) GetKeyState(0x90)) & 0xffff) == 0;
             ToggleNumKeys(numLocked);
         }
 
@@ -65,12 +65,16 @@ namespace LogiNumLock
 
             _numLocked = numLocked;
 
+            SetNumKeyColors();
+        }
+
+        void SetNumKeyColors()
+        {
             int onRed = 255, onGreen = 20, onBlue = 0;
             int offRed = 203, offGreen = 255, offBlue = 10;
-
-            var r = numLocked ? onRed : offRed;
-            var g = numLocked ? onGreen : offGreen;
-            var b = numLocked ? onBlue : offBlue;
+            var r = _numLocked ? onRed : offRed;
+            var g = _numLocked ? onGreen : offGreen;
+            var b = _numLocked ? onBlue : offBlue;
 
             foreach (var key in _numKeys)
             {
