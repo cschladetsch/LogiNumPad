@@ -14,7 +14,25 @@ namespace LogiNumLock
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool LogiLedFlashLighting(int redPercentage, int greenPercentage, int bluePercentage, int milliSecondsDuration, int milliSecondsInterval);
 
+        // CAPITAL is usually 0x14, but it's been remapped in registry for InCode
+        //const int VK_CAPITAL = 0xA3;//0x14;
+        const int VK_CAPITAL = 0x14;
+        const int VK_NUMLOCK = 0x90;
+
         private bool _numLocked;
+        private bool _capsLocked;
+
+        private readonly keyboardNames[] _incodeKeys =
+        {
+            keyboardNames.Q,
+            keyboardNames.E,
+            keyboardNames.S,
+            keyboardNames.D,
+            keyboardNames.F,
+            keyboardNames.R,
+            keyboardNames.V,
+            keyboardNames.SPACE,
+        };
 
         private readonly keyboardNames[] _numKeys =
         {
@@ -45,13 +63,13 @@ namespace LogiNumLock
             LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
 
             // Read and apply start keypad state
-            SetNumKeyState();
+            SetKeyState();
 
-            Console.WriteLine($"Monitoring Numlock. Current status={_numLocked}\n\n");
+            Console.WriteLine($"Monitoring NumLock and CapsLock. Current status: num={_numLocked}, caps={_capsLocked}\n");
 
             const int pollTime = 60; // milliseconds
             var timer = new Timer(pollTime) {Enabled = true};
-            timer.Elapsed += (sender, eventArgs) => { SetNumKeyState(); };
+            timer.Elapsed += (sender, eventArgs) => { SetKeyState(); };
 
             Console.WriteLine("Press \"ENTER\" to close.");
             Console.ReadLine();
@@ -59,10 +77,39 @@ namespace LogiNumLock
             LogitechGSDK.LogiLedShutdown();
         }
 
-        private void SetNumKeyState()
+        private void SetKeyState()
         {
-            var numLocked = ((ushort) GetKeyState(0x90) & 0xffff) == 0;
+            var numLocked = ((ushort) GetKeyState(VK_NUMLOCK) & 0xffff) == 0;
             ToggleNumKeys(numLocked);
+
+            // TODO: why doesn't this work?
+            var caps = ((ushort)GetKeyState(VK_CAPITAL) & 0xffff) == 0;
+            ToggleCapsLock(caps);
+        }
+
+        private void ToggleCapsLock(bool capsLock)
+        {
+            if (_capsLocked == capsLock)
+                return;
+
+            _capsLocked = capsLock;
+            Console.WriteLine($"CapsLock = {_capsLocked}");
+            var r = _capsLocked ? 0 : 255;
+            var g = _capsLocked ? 55 : 0;
+            var b = _capsLocked ? 255 : 100;
+            LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(keyboardNames.CAPS_LOCK, r, g, b);
+            //HighlightIncodeKeys();
+        }
+
+        private void HighlightIncodeKeys()
+        {
+            var r = _capsLocked ? 255 : 200;
+            var g = _capsLocked ? 0 : 255;
+            var b = _capsLocked ? 0 : 10;
+            foreach (var key in _incodeKeys)
+            {
+                LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(key, r, g, b);
+            }
         }
 
         private void ToggleNumKeys(bool numLocked)
@@ -71,7 +118,6 @@ namespace LogiNumLock
                 return;
 
             _numLocked = numLocked;
-
             SetNumKeyColors();
         }
 
