@@ -121,7 +121,7 @@ namespace LedCSharp
         G_9 = 0xFFF9,
         G_LOGO = 0xFFFF1,
         G_BADGE = 0xFFFF2
-    };
+    }
 
     public enum DeviceType
     {
@@ -234,5 +234,4 @@ namespace LedCSharp
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
         public static extern void LogiLedShutdown();
     }
-
 }
