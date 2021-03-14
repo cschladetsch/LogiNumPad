@@ -55,11 +55,7 @@ namespace LogiNumLock
             LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
 
             GetAppSettings();
-
-            // Read and apply start keypad state
             SetKeyState();
-
-            Console.WriteLine($"Monitoring NumLock. Current status: num={_numLocked}\n");
 
             const int pollTime = 60; // milliseconds
             var timer = new Timer(pollTime) {Enabled = true};
