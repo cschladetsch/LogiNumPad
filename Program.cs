@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Timers;
+using System.Drawing;
+using System.Configuration;
 using System.Runtime.InteropServices;
 
 using LedCSharp;
-using System.Configuration;
-using System.Drawing;
-using System.Linq;
 
 namespace LogiNumLock
 {
@@ -17,10 +17,10 @@ namespace LogiNumLock
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool LogiLedFlashLighting(int redPercentage, int greenPercentage, int bluePercentage, int milliSecondsDuration, int milliSecondsInterval);
 
-        const int VK_NUMLOCK = 0x90;
-
+        private const int VK_NUMLOCK = 0x90;
+        private bool _first = true;
         private bool _numLocked;
-        
+
         private Color _keyPadOn;
         private Color _keyPadOff;
         private Color _numLockOn;
@@ -87,8 +87,6 @@ namespace LogiNumLock
             var numLocked = ((ushort) GetKeyState(VK_NUMLOCK) & 0xffff) == 0;
             ToggleNumKeys(numLocked);
         }
-
-        bool _first = true;
 
         private void ToggleNumKeys(bool numLocked)
         {
